@@ -12,6 +12,10 @@ describe('invoice module', () => {
        
        cy.loginFromUi()
        cy.get('#productManagerBtn')
+       cy.get(':nth-child(3) > .nav-link').click()
+       cy.url().should('includes', '/invoices')
+       cy.get('.Create-btn')
+       cy.wait(4000)
         
     }) 
    
@@ -27,14 +31,10 @@ describe('invoice module', () => {
     })
 
     // test Case:1 create an invoice wihtout a coupon
-    it.only('should create an invoice', () => {
+    it('should create an invoice', () => {
   
        
-        cy.get(':nth-child(3) > .nav-link').click()
-        cy.url().should('includes', '/invoices')
-        cy.get('.Create-btn')
-        cy.wait(4000)
-
+       
         cy.contains(' Create Invoice ').click()
 
         // wait to load the complete objects on the page
@@ -116,9 +116,6 @@ describe('invoice module', () => {
     // test Case #2: Checking the pop with Correct Details
 
     it('check the invoice total value on create and listing page',()=>{
-      
-        cy.get(':nth-child(3) > .nav-link').click()
-        cy.wait(10000)
         
 
         cy.get('table > tbody > :nth-child(1) > .cdk-column-totalValue').and('not.be.empty').then(($price) => {
@@ -139,8 +136,25 @@ describe('invoice module', () => {
         
     })
 
+    // test Case #3: Verify the Export button is working
 
-  
+    it('verify the export button is working',()=>{
+     
+      cy.get('.outline-btn')
+      cy.get('.outline-btn')
+      .click()
+      .should('contain','Export')
+    })
+
+    // test Case #4: Verify the action copy button is working
+
+    it.only('verify that invoice link is copied',()=>{
+      cy.wait(5000)
+      cy.get(':nth-child(1) > .cdk-column-invoiceId > .margin-left > img').click()
+      cy.get('.mat-simple-snackbar').contains('Invoice link copied')
+      
+    })
     
+
   })
 
