@@ -12,10 +12,5 @@ module.exports = defineConfig({
     shipping: "5",
     token: "",
   },
-
-  e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
-  },
+  
 });
