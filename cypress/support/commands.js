@@ -1,20 +1,13 @@
-
-
 Cypress.Commands.add('loginFromUi', () => {
-    // login With UI
      cy.visit('https://staging.circlepay.ai/')
-      cy.get('.mat-input-element').type('+923244323448').should('have.value','3244323448')
+      cy.get('.mat-input-element').type(Cypress.env('merchantNumber'))
       cy.contains('Get Started').click()
       cy.url().should('include', '/auth')
-      cy.get('.password-field').type('Admin125!@%')
+      cy.get('.password-field').type(Cypress.env('password'))
       cy.contains('Get Started').click()
-     
-      cy.setCookie('CIRCLE_PAY_JWT_TOKEN', 'res.body.data.token')
+
 })
 
-
-
-// login with API
 Cypress.Commands.add('loginWithApi',()=>{
     cy.request({
         url:'https://staging.dashboard.apicirclepay.com/users/login',
@@ -28,15 +21,22 @@ Cypress.Commands.add('loginWithApi',()=>{
             },
         
             failOnStatusCode: false,
-}).then(res =>{
-     localStorage.setItem('CIRCLE_PAY_JWT_TOKEN', res.body.data.token)}
-)  
+        }).then(response =>{
+            const value = response.body.data.token;
+            return value;
+    }) 
 })
 
-
-
 Cypress.Commands.add('logout', () => {
-    //cy.window().its('localStorage').invoke('removeItem', 'session')
     localStorage.removeItem('CIRCLE_PAY_JWT_TOKEN');
     cy.visit('/')
+})
+
+Cypress.Commands.add('closePopUpModel',()=>{
+    cy.get('.modal-dialog')  
+    .should('be.visible')
+    .find('.modal-header')
+    .find('button[type="button"]')      
+              .should('contain', '×')                
+    .click()
 })
